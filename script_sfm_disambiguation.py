@@ -7,6 +7,7 @@ import torch.distributed
 from torch.backends import cudnn
 import tqdm
 import numpy as np
+import sys
 
 from doppelgangers.utils.process_database import create_image_pair_list, remove_doppelgangers
 from doppelgangers.utils.loftr_matches import save_loftr_matches
@@ -202,7 +203,8 @@ def main_worker(gpu, ngpus_per_node, cfg, args):
     # colmap reconstruction with doppelgangers classifier  
     print("colmap reconstruction with doppelgangers classifier")  
     doppelgangers_result_path = os.path.join(args.output_path, 'sparse_doppelgangers_%.3f'%args.threshold)    
-    os.makedirs(doppelgangers_result_path, exist_ok=True)       
+    os.makedirs(doppelgangers_result_path, exist_ok=True)     
+    sys.exit(0)
     command = [args.colmap_exe_command, 'mapper',
            '--database_path', update_database_path,
            '--image_path', args.input_image_path,
