@@ -53,7 +53,7 @@ def read_image(img_pth, img_size, df, padding):
     return pad_image, mask
 
 
-def save_loftr_matches(data_path, pair_path, output_path, model_weight_path="weights/outdoor_ds.ckpt"):
+def save_loftr_matches(data_path, pair_path, output_path, prefix='loftr_match',  model_weight_path="weights/outdoor_ds.ckpt"):
     # The default config uses dual-softmax.
     # The outdoor and indoor models share the same config.
     # You can change the default values like thr and coarse_match_type.
@@ -67,7 +67,7 @@ def save_loftr_matches(data_path, pair_path, output_path, model_weight_path="wei
     padding = True
 
     for idx in tqdm.tqdm(range(pairs_info.shape[0])):
-        if osp.exists(output_path+'loftr_match/%d.npy'%idx):
+        if osp.exists(os.path.join(output_path, prefix + '/%d.npy'%idx)):
             continue
         name0, name1, _, _, _ = pairs_info[idx]
 
@@ -82,12 +82,13 @@ def save_loftr_matches(data_path, pair_path, output_path, model_weight_path="wei
         batch = {'image0': img0, 'image1': img1, 'mask0': mask0, 'mask1':mask1}
 
         # Inference with LoFTR and get prediction
-        with torch.no_grad():
+        with torch.inference_mode():
             matcher(batch)
             mkpts0 = batch['mkpts0_f'].cpu().numpy()
             mkpts1 = batch['mkpts1_f'].cpu().numpy()
             mconf = batch['mconf'].cpu().numpy()
 
-            np.save(output_path+'loftr_match/%d.npy'%idx, {"kpt0": mkpts0, "kpt1": mkpts1, "conf": mconf})
+            np.save(os.path.join(output_path,prefix + '/%d.npy'%idx), {"kpt0": mkpts0, "kpt1": mkpts1, "conf": mconf}
+    return os.path.join(output_path,prefix)
 
 
