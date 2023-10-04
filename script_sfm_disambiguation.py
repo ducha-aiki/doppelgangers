@@ -41,6 +41,9 @@ def get_args():
     # output setting
     parser.add_argument('--output_path', type=str,
                         help='path to output results')
+    parser.add_argument('--num_workers', type=int,
+                        help='')
+    
 
     # Doppelgangers threshold setting
     parser.add_argument('--threshold', default=0.8, type=float,
@@ -187,7 +190,8 @@ def main_worker(gpu, ngpus_per_node, cfg, args):
     cfg.data.image_dir = args.input_image_path
     cfg.data.loftr_match_dir = matches_dir1
     cfg.data.test.pair_path = pair_path
-    cfg.data.output_path = args.output_path    
+    cfg.data.output_path = args.output_path   
+    cfg.data.num_workers = args.num_workers
     save_update_config(cfg, args)    
     print (cfg)
     
