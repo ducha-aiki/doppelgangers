@@ -28,6 +28,8 @@ def get_args():
                         help="skip colmap feature matching stage")
     parser.add_argument('--database_path', default=None, type=str,
                         help="path to database.db")
+    parser.add_argument('--loftr_match_dir', default=None, type=str,
+                        help="temp loftr matches")
     parser.add_argument('--skip_reconstruction', default=False, action='store_true',
                         help="skip colmap reconstruction w/o doppelgangers classifier")
     
@@ -81,6 +83,7 @@ def save_update_config(cfg, args):
     example_config['data']['loftr_match_dir'] = cfg.data.loftr_match_dir
     example_config['data']['test']['pair_path'] = cfg.data.test.pair_path
     example_config['data']['output_path'] = cfg.data.output_path
+    
 
     with open(config_file, "w") as f:
         yaml.dump(example_config, f)
@@ -185,6 +188,7 @@ def main_worker(gpu, ngpus_per_node, cfg, args):
     cfg.data.test.pair_path = pair_path
     cfg.data.output_path = args.output_path    
     save_update_config(cfg, args)    
+    print (cfg)
     
     # Running Doppelgangers classifier model on image pairs
     print("Running Doppelgangers classifier model on image pairs")
