@@ -18,7 +18,7 @@ def read_two_view_from_db(database_path):
     F_list = []
     pairs_id = []
 
-    for pair_id, rows, cols, data, config, F, E, H, qvec, tvec in db.execute("SELECT pair_id, rows, cols, data, config, F, E, H, qvec, tvec FROM two_view_geometries"):
+    for pair_id, rows, cols, data, config, F, E, H in db.execute("SELECT pair_id, rows, cols, data, config, F, E, H FROM two_view_geometries"):
         id1, id2 = pair_id_to_image_ids(pair_id)
         name1, name2 = id2name[id1], id2name[id2]
         if data is None:
@@ -30,8 +30,6 @@ def read_two_view_from_db(database_path):
         F = blob_to_array(F, np.float64).reshape(-1,3)
         E = blob_to_array(E, np.float64).reshape(-1,3)
         H = blob_to_array(H, np.float64).reshape(-1,3)
-        qvec = blob_to_array(qvec, np.float64)
-        tvec = blob_to_array(tvec, np.float64)
         H_list.append(H)
         F_list.append(F)
         E_list.append(E)
