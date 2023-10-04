@@ -180,11 +180,11 @@ def main_worker(gpu, ngpus_per_node, cfg, args):
     loftr_matches_path = os.path.join(args.output_path, 'loftr_match')
     os.makedirs(loftr_matches_path, exist_ok=True)
     pair_path = create_image_pair_list(args.database_path, args.output_path)
-    save_loftr_matches(args.input_image_path, pair_path, args.output_path)
+    matches_dir1 = save_loftr_matches(args.input_image_path, pair_path, args.output_path,  prefix = loftr_match)
 
     # edit config file with corresponding data path
     cfg.data.image_dir = args.input_image_path
-    cfg.data.loftr_match_dir = loftr_matches_path
+    cfg.data.loftr_match_dir = matches_dir1
     cfg.data.test.pair_path = pair_path
     cfg.data.output_path = args.output_path    
     save_update_config(cfg, args)    
@@ -198,7 +198,7 @@ def main_worker(gpu, ngpus_per_node, cfg, args):
     print("remove all the pairs with a probability lower than the threshold in database")  
     pair_probability_file = os.path.join(args.output_path, "pair_probability_list.npy")
     update_database_path = remove_doppelgangers(args.database_path, pair_probability_file, pair_path, args.threshold)
-
+    print (f"saved to {update_database_path}")
     # colmap reconstruction with doppelgangers classifier  
     print("colmap reconstruction with doppelgangers classifier")  
     doppelgangers_result_path = os.path.join(args.output_path, 'sparse_doppelgangers_%.3f'%args.threshold)    
