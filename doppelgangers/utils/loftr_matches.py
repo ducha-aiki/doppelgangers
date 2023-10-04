@@ -67,7 +67,7 @@ def save_loftr_matches(data_path, pair_path, output_path, prefix='loftr_match', 
     padding = True
 
     for idx in tqdm.tqdm(range(pairs_info.shape[0])):
-        if osp.exists(os.path.join(output_path, prefix + '/%d.npy'%idx)):
+        if osp.exists(osp.join(output_path, prefix + '/%d.npy'%idx)):
             continue
         name0, name1, _, _, _ = pairs_info[idx]
 
@@ -88,7 +88,7 @@ def save_loftr_matches(data_path, pair_path, output_path, prefix='loftr_match', 
             mkpts1 = batch['mkpts1_f'].cpu().numpy()
             mconf = batch['mconf'].cpu().numpy()
 
-            np.save(os.path.join(output_path,prefix + '/%d.npy'%idx), {"kpt0": mkpts0, "kpt1": mkpts1, "conf": mconf})
-    return os.path.join(output_path,prefix)
+            np.save(osp.join(output_path,prefix + '/%d.npy'%idx), {"kpt0": mkpts0, "kpt1": mkpts1, "conf": mconf})
+    return osp.join(output_path,prefix)
 
 
